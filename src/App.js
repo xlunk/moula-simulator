@@ -129,7 +129,7 @@ const App = () => {
                     </>
                 ) : casinoOpen ? (
                     <>
-                    <button onClick={() => setCasinoPage(false)} className="back-button">Back to Main Game</button>
+              
 
                         <h2>Casino - Choose Red or Blue</h2>
                         <input value={betColor} onChange={(e) => setBetColor(e.target.value.toLowerCase())} placeholder="Type 'red' or 'blue'" />
