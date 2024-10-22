@@ -99,7 +99,7 @@ const App = () => {
 
     return (
         <div className="App">
-            <h1 className="title">Moula Moula</h1>
+            <h1 className="title">Moula Moula [BETA]</h1>
             <h2 className="money">Money: ${money.toFixed(2)}</h2>
             <h3>Money Per Click: ${moneyPerClick * prestigeMultiplier}</h3>
             <h3>Auto Earnings: ${autoEarnings * prestigeMultiplier}/sec</h3>
@@ -139,7 +139,7 @@ const App = () => {
                 ) : null}
             </div>
 
-            <footer className="footer">Game by: @xlnk</footer>
+            <footer className="footer">Game by: @xlnk - This game is in current development and in a BETA stage. Contact @xlnk on Discord for any bug fixes or ideas to add!</footer>
         </div>
     );
 };
