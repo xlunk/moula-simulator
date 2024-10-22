@@ -1,15 +1,18 @@
-/* src/App.css */
-
 body {
     margin: 0;
     font-family: 'Arial', sans-serif;
     background-color: #121212;
     color: #ffffff;
+    height: 100vh; /* Ensure the body takes the full viewport height */
+    overflow-y: hidden; /* Prevent scroll on the body */
 }
 
 .App {
     text-align: center;
     padding: 20px;
+    height: 100vh; /* Full viewport height */
+    overflow-y: auto; /* Enable scrolling within the App container */
+    box-sizing: border-box;
 }
 
 .title {
@@ -100,4 +103,11 @@ button:disabled {
     transform: translateX(-50%);
     font-size: 1.2em;
     color: #ff9800;
+}
+
+/* Add scroll for content */
+.App {
+    max-height: calc(100vh - 50px); /* Subtract some space for padding/footer */
+    overflow-y: auto; /* Enable vertical scroll */
+    padding-bottom: 60px; /* Prevent content from being obscured by footer */
 }
