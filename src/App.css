@@ -1,3 +1,24 @@
+.spinner {
+    width: 100px;
+    height: 100px;
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #ff0000;
+    border-bottom: 16px solid #0000ff;
+    border-radius: 50%;
+    animation: none; /* Default no spin */
+    transition: all 3s ease;
+}
+
+.spinning {
+    animation: spin 3s infinite; /* Spins for 3 seconds */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
 body {
     margin: 0;
     font-family: 'Arial', sans-serif;
