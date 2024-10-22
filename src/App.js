@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 const App = () => {
-    // State for the game mechanics
     const [money, setMoney] = useState(() => Number(localStorage.getItem("money")) || 0);
     const [moneyPerClick, setMoneyPerClick] = useState(() => Number(localStorage.getItem("moneyPerClick")) || 1);
     const [autoEarnings, setAutoEarnings] = useState(() => Number(localStorage.getItem("autoEarnings")) || 0);
@@ -12,9 +11,9 @@ const App = () => {
     const [prestigeCost, setPrestigeCost] = useState(() => Number(localStorage.getItem("prestigeCost")) || 1000);
     const [upgradePage, setUpgradePage] = useState(false);
     const [casinoOpen, setCasinoOpen] = useState(false);
-    const [betColor, setBetColor] = useState("");
-    const [upgradeMessages, setUpgradeMessages] = useState("");
     const [casinoOutcome, setCasinoOutcome] = useState("");
+    const [betColor, setBetColor] = useState("");
+    const [wheelSpin, setWheelSpin] = useState(false);
 
     // Save game data in localStorage on changes
     useEffect(() => {
@@ -37,7 +36,6 @@ const App = () => {
         if (money >= cost) {
             setMoney(prev => prev - cost);
             setMoneyPerClick(prev => prev + increase);
-            setUpgradeMessages(`You purchased ${upgradeName} for $${cost}. The next one costs $${cost * 2}.`);
             return cost * 2; // Return new cost (doubled)
         }
         return cost;
@@ -48,30 +46,37 @@ const App = () => {
         if (money >= cost) {
             setMoney(prev => prev - cost);
             setAutoEarnings(prev => prev + increase);
-            setUpgradeMessages(`You purchased Auto-Earnings for $${cost}.`);
             return cost * 2; // Return new cost (doubled)
         }
         return cost;
     };
 
-    // Casino function: Open a menu where user types red or blue
+    // Casino function: Open a menu with two buttons for red or blue
     const openCasino = () => {
         setCasinoOpen(true);
+        setCasinoOutcome("");
+        setBetColor("");
+        setWheelSpin(false);
     };
 
-    const spinWheel = () => {
-        if (betColor && money > 0) {
+    // Spin the wheel and determine the outcome
+    const spinWheel = (color) => {
+        if (money > 0) {
+            setBetColor(color);
+            setWheelSpin(true); // Start spinning animation
+
             const outcome = Math.random() < 0.5 ? "red" : "blue";
             setTimeout(() => {
-                if (outcome === betColor) {
+                if (outcome === color) {
                     setMoney(prev => prev * 2); // Double the money
                     setCasinoOutcome(`The wheel landed on ${outcome}! You won and doubled your money!`);
                 } else {
                     setMoney(0); // Lose all money
                     setCasinoOutcome(`The wheel landed on ${outcome}. You lost all your money.`);
                 }
-            }, 2000); // Simulate spin delay
-            setCasinoOpen(false); // Close casino
+                setCasinoOpen(false); // Close the casino after result
+                setWheelSpin(false); // Stop spinning
+            }, 3000); // Simulate spin delay
         }
     };
 
@@ -117,7 +122,7 @@ const App = () => {
                         <button onClick={openCasino} className="casino-button">Open Casino</button>
                         <button onClick={prestige} disabled={money < prestigeCost} className="prestige-button">Prestige (Cost: ${prestigeCost})</button>
                         <button onClick={() => setUpgradePage(true)} className="upgrade-page-button">Go to Upgrades Page</button>
-                        {upgradeMessages && <p className="upgrade-message">{upgradeMessages}</p>}
+                        {casinoOutcome && <p className="casino-outcome">{casinoOutcome}</p>}
                     </>
                 ) : upgradePage ? (
                     <>
@@ -129,12 +134,13 @@ const App = () => {
                     </>
                 ) : casinoOpen ? (
                     <>
-              
-
-                        <h2>Casino - Choose Red or Blue</h2>
-                        <input value={betColor} onChange={(e) => setBetColor(e.target.value.toLowerCase())} placeholder="Type 'red' or 'blue'" />
-                        <button onClick={spinWheel} className="casino-spin-button">Spin the Wheel</button>
-                        {casinoOutcome && <p className="casino-outcome">{casinoOutcome}</p>}
+                        <h2>Casino - Choose Your Color</h2>
+                        <div className="wheel">
+                            <div className={`spinner ${wheelSpin ? 'spinning' : ''}`}></div>
+                        </div>
+                        <button onClick={() => spinWheel('red')} className="casino-button">Bet on Red</button>
+                        <button onClick={() => spinWheel('blue')} className="casino-button">Bet on Blue</button>
+                        <button onClick={() => setCasinoOpen(false)} className="back-button">Back to Main Game</button>
                     </>
                 ) : null}
             </div>
