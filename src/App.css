@@ -30,7 +30,7 @@ body {
     gap: 10px;
 }
 
-.main-button, .upgrade-button, .casino-button, .prestige-button {
+.main-button, .upgrade-button, .casino-button, .prestige-button, .back-button, .upgrade-page-button {
     padding: 15px 30px;
     font-size: 1.2em;
     cursor: pointer;
@@ -72,7 +72,32 @@ body {
     background-color: #5e35b1;
 }
 
+.back-button, .upgrade-page-button {
+    background-color: #ff5722;
+}
+
+.back-button:hover, .upgrade-page-button:hover {
+    background-color: #e64a19;
+}
+
 button:disabled {
     background-color: #555;
     cursor: not-allowed;
+}
+
+.auto-clicker {
+    position: absolute;
+    font-size: 2em;
+    color: #ff9800;
+    top: -20px;
+    right: -40px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.2em;
+    color: #ff9800;
 }
