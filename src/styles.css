@@ -1,0 +1,36 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    overflow: hidden;
+    background: #2c3e50;
+    color: #ecf0f1;
+    text-align: center;
+}
+
+#menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#menu h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+button {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-size: 1.5rem;
+}
+
+button:hover {
+    background: #c0392b;
+}
