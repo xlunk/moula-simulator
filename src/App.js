@@ -197,6 +197,8 @@ const App = () => {
                         <button onClick={() => buyUpgrade(100, 5, 'New House')} disabled={money < 100} className="upgrade-button">Buy New House (Cost: $100)</button>
                         <button onClick={() => buyUpgrade(200, 10, 'Machine')} disabled={money < 200} className="upgrade-button">Buy Machine (Cost: $200)</button>
                         <button onClick={() => buyUpgrade(500, 20, 'Food Production')} disabled={money < 500} className="upgrade-button">Buy Food Production (Cost: $500)</button>
+                                           <button onClick={() => buyUpgrade(50000, 1000, 'Basic Upgrade')} disabled={money < 50000} className="upgrade-button">Buy Upgrade (+$1000 per click) (Cost: $50000)</button>
+                               <button onClick={() => buyAutoEarnings(100000, 1000)} disabled={money < 100000} className="upgrade-button">Buy Auto-Earnings (+$1000/sec) (Cost: $100000)</button>
                     </>
                 ) : casinoOpen ? (
                     <>
