@@ -118,13 +118,18 @@ button:disabled {
 }
 
 .footer {
-
-    bottom: 0;
-    right: 50%;
-    transform: translateX(-50%);
-    font-size: 1.2em;
-    color: #ff9800;
+    position: fixed;
+    bottom: 0; /* Position it at the bottom */
+    left: 50%; /* Start at the left center */
+    transform: translateX(-50%); /* Shift it left by half its width to center */
+    font-size: 1.2em; /* Set font size */
+    color: #ff9800; /* Set text color */
+    text-align: center; /* Center the text */
+    width: 100%; /* Make it take full width if needed */
+    padding: 10px 0; /* Add some padding for better appearance */
+    background-color: rgba(255, 255, 255, 0.8); /* Optional: Add a background for better visibility */
 }
+
 
 /* Add scroll for content */
 .App {
