@@ -151,23 +151,35 @@ const App = () => {
         }
     };
 
-      const spendAllMoneyOnUpgrades = () => {
-        let cost = 50;
-        let increase = 2;
-        let moneyLeft = money;
-        let upgradesBought = 0;
+   const calculateTotalUpgrades = (initialCost, increasePerUpgrade, currentMoney) => {
+    let totalUpgrades = 0;
+    let cost = initialCost;
+    let totalCost = 0;
 
-        // Purchase upgrades while the user has enough money
-        while (moneyLeft >= cost) {
-            upgradesBought++;
-            moneyLeft -= cost;
-        }
+    // Sum geometric progression until you run out of money
+    while (totalCost + cost <= currentMoney) {
+        totalCost += cost;
+        totalUpgrades++;
+        cost *= 2; // Each upgrade doubles in price
+    }
 
-        if (upgradesBought > 0) {
-            setMoney(moneyLeft); // Update money after purchases
-            setMoneyPerClick(prev => prev + upgradesBought * increase); // Increase money per click
-        }
-    };
+    return { totalUpgrades, totalCost };
+};
+
+// Function to spend all money on upgrades in one go
+const spendAllMoneyOnUpgrades = () => {
+    const initialCost = 50;
+    const increasePerUpgrade = 2;
+
+    // Calculate how many upgrades can be bought and the total cost
+    const { totalUpgrades, totalCost } = calculateTotalUpgrades(initialCost, increasePerUpgrade, money);
+
+    if (totalUpgrades > 0) {
+        // Update money and moneyPerClick based on total upgrades bought
+        setMoney(prevMoney => prevMoney - totalCost); // Deduct total cost
+        setMoneyPerClick(prevPerClick => prevPerClick + totalUpgrades * increasePerUpgrade); // Increase money per click
+    }
+};
     // Double or nothing feature
     const doubleOrNothing = () => {
         const rand = Math.random();
@@ -222,7 +234,8 @@ const formatNumber = (num) => {
                         <button onClick={testYourLuck} className="luck-button">Test Your Luck</button> {/* Added Test Your Luck */}
                         <button onClick={prestige} disabled={money < prestigeCost} className="prestige-button">Prestige (Cost: ${prestigeCost})</button>
                         <button onClick={() => setUpgradePage(true)} className="upgrade-page-button">Go to Upgrades Page</button>
- <button onClick={spendAllMoneyOnUpgrades}>Spend All Money on +2 Upgrades</button>
+<button onClick={spendAllMoneyOnUpgrades}>Spend All Money on Upgrades</button>
+
                        
                     </>
                 ) : upgradePage ? (
