@@ -151,7 +151,7 @@ const App = () => {
         }
     };
 
-   const calculateTotalUpgrades = (initialCost, increasePerUpgrade, currentMoney) => {
+  const calculateTotalUpgrades = (initialCost, increasePerUpgrade, currentMoney) => {
     let totalUpgrades = 0;
     let cost = initialCost;
     let totalCost = 0;
@@ -168,16 +168,18 @@ const App = () => {
 
 // Function to spend all money on upgrades in one go
 const spendAllMoneyOnUpgrades = () => {
-    const initialCost = 50;
-    const increasePerUpgrade = 2;
+    const initialCost = 50; // Starting cost of upgrades
+    const increasePerUpgrade = 2; // Each upgrade adds $2 per click
 
     // Calculate how many upgrades can be bought and the total cost
     const { totalUpgrades, totalCost } = calculateTotalUpgrades(initialCost, increasePerUpgrade, money);
 
     if (totalUpgrades > 0) {
-        // Update money and moneyPerClick based on total upgrades bought
-        setMoney(prevMoney => prevMoney - totalCost); // Deduct total cost
-        setMoneyPerClick(prevPerClick => prevPerClick + totalUpgrades * increasePerUpgrade); // Increase money per click
+        // Deduct total cost from player's money
+        setMoney(prevMoney => prevMoney - totalCost);
+
+        // Increment moneyPerClick based on the number of upgrades bought
+        setMoneyPerClick(prevPerClick => prevPerClick + totalUpgrades * increasePerUpgrade);
     }
 };
     // Double or nothing feature
