@@ -223,7 +223,7 @@ const formatNumber = (num) => {
                         <button onClick={prestige} disabled={money < prestigeCost} className="prestige-button">Prestige (Cost: ${prestigeCost})</button>
                         <button onClick={() => setUpgradePage(true)} className="upgrade-page-button">Go to Upgrades Page</button>
  <button onClick={spendAllMoneyOnUpgrades}>Spend All Money on +2 Upgrades</button>
-     <p className="credits" Game by: @xlnk</p>
+     <p>Game by: @xlnk</p>
                        
                     </>
                 ) : upgradePage ? (
