@@ -47,6 +47,46 @@ const App = () => {
         return () => clearInterval(interval);
     }, []);
 
+    useEffect(() => {
+        let lastPressTime = 0;
+        let pressCount = 0;
+
+        const handleKeyDown = (event) => {
+            if (event.key === '.') {
+                const currentTime = Date.now();
+                if (currentTime - lastPressTime <= 3000) {
+                    pressCount++;
+                } else {
+                    pressCount = 1; // reset count if more than 3 seconds
+                }
+
+                lastPressTime = currentTime;
+
+                if (pressCount === 3) {
+                    setShowKeyInput(true);
+                    pressCount = 0; // reset count after opening input
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    // Function to check private key
+    const checkPrivateKey = () => {
+        const privateKey = `MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQD1zHX4hKpRC9V9RlbvhYBLvp/3qmy9yTq3+JucvliM8nnS8QuGrMnA5l/SQraZ3YFBAilJeZEQHObXxLmWWbN0Ttf96vc1OeFsMoqmOTBX12BjxfF5ikeR9wTB0XI2dd0Ks4rGMOqpzHnG2ZyoUOtsXPhgRhZjggqeuI6N6PlhFRLsSch84m5hFB926yWJT/nVPr8pP8sCB7SGt2KPlstYpLtJnyuIG0xCkaCOXheEnigJgfO9Ggbk7GEy4f4AkuZFtr0ALv81IdXQpfcPfFQ4xDgj1jgbao6UId0C9PaEiiJAghPqcH9Igx6XX+evSEe1tdOa7dE8OBCEa74a7JkJAgMBAAECggEADxby6cOAjo0tbrgSFOObPAst2DnW3H0tZPyW1l6RInCtrezXtPgyl+xiAY8llU3rO3RzLcGQIu8Yn4fCOkqzdkvI0sZz+rPc9Ol9aDWmlB3yxZfx+nDUx/nkNDSJex0X6X+a4LlBZBSGKAEABGKYsVmxHdKaWULd0rSoe78hCtFDlVuvnEUfEXcQtwAIElgh6DL5nHYUsD8HTFZMCakZyyS7wzeL4fi+W0Be1xUZgxHDTR68bQBa2hdLLg4hbAgOEmcWIT9jgygAYf+d4yCVQENjkwgYxMF7GmVKWCM42bzP+3cf4HdYZu2gWn1K4jwy+OYKVUaOrIXRdFSP+oLnoQKBgQD72opPccsAlUZzaNHYFTKzs5UhJ+TrZVxevzkqw5AuHTc+UCVNBORNKjXt1DNr7O4Y5XltP58PMKdasgMqtZcpEZ60/LunUBJjHj329oyCHOEHwSgmmChioJ8M/aoLUdxIBKtBBhQ4f2u0SXx/Q1avoFVT+JDirjfcZK8+sKlw9QKBgQD52Ga2bT7WBnXwDIY1lw4HisOBR+rw2xYBiFtIeG4RJfjyhXYGHs+kchIuCEOo6MwIQUzZZN60W0PMmaUKjgn8QHLxuN2j1Tn7Po8z+KA33HjwbtUxD5C9tiXTMjMkvgFZ8LqoKNUH/NdStjg+ag0BQXiOhkRqsH+swTmoPSgrRQKBgB22puLAlia3ddxf3YIU3ip9YXbL8iIjj0ZOYTw+XmBSahYb9oqjrRu9gydQBdER3vVo/W56NxXfs57rqZv8WJ0rywGnX6xZshGnm7/rTqB7L8FudII5KWqZcKpjsxAq1EZa5qmBQhl4TwiyMtIA69VEoUyK4u0biNOjvVk0FomRAoGAPlG/FQPc54/G/TByjY13H2R6bZXdwWQ0cf9sHYCEm9xn4z5s+QvYaUFWzYqcLdabhfebzqH9dulI2RD9DbXjLZQ7iwgMFUeXHb2GbPTeTKV4HWSRffwLhf5isXU82Pgrg6HRLvVh9lvViF1BlRB8nkp3HynWXc8FwsakzqAEXL80tEMgB6cxonak=`;
+
+        if (keyInput === privateKey) {
+            setDevMode(true);
+            setShowKeyInput(false);
+            setKeyInput("");
+        } else {
+            alert("Invalid key. Please try again.");
+        }
+    };
     // 1-hour reminder
     useEffect(() => {
         if (playTime >= 3600) {
@@ -221,6 +261,34 @@ const App = () => {
                     <button onClick={() => setShowPopup(false)}>OK</button>
                 </div>
             )}
+
+                        {showKeyInput && (
+                <div className="popup">
+                    <h2>Enter Secret Key</h2>
+                    <input 
+                        type="text" 
+                        value={keyInput} 
+                        onChange={(e) => setKeyInput(e.target.value)} 
+                    />
+                    <button onClick={checkPrivateKey}>Submit</button>
+                    <button onClick={() => setShowKeyInput(false)}>Cancel</button>
+                </div>
+            )}
+
+            {/* Development Menu */}
+            {devMode && (
+                <div className="dev-menu">
+                    <h2>Development Menu</h2>
+                    <button onClick={() => setMoney(money + 10000)}>Add 10,000 Money</button>
+                    <button onClick={() => setMoneyPerClick(moneyPerClick + 1)}>Increase Money per Click</button>
+                    <button onClick={() => setAutoEarnings(autoEarnings + 1)}>Increase Auto Earnings</button>
+                    <button onClick={() => setPrestigePoints(prestigePoints + 1)}>Add Prestige Point</button>
+                    <button onClick={() => setPrestigeCost(prestigeCost * 2)}>Double Prestige Cost</button>
+                    <button onClick={() => setCasinoOpen(true)}>Open Casino</button>
+                    {/* Add other dev features here */}
+                </div>
+            )}
+        </div>
 
             <footer className="footer">Game by: @xlnk - This game is in current development and in a BETA stage. Contact @xlnk on Discord for any bug fixes or ideas to add!</footer>
         </div>
