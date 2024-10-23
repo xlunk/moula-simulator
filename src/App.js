@@ -152,46 +152,28 @@ const App = () => {
     };
 
 // Function to calculate how many upgrades can be bought and their total cost
-const calculateTotalUpgrades = (initialCost, increasePerUpgrade, currentMoney) => {
-    let totalUpgrades = 0;
-    let cost = initialCost;
-    let totalCost = 0;
-
-    // Sum geometric progression until you run out of money
-    while (totalCost + cost <= currentMoney) {
-        totalCost += cost;
-        totalUpgrades++;
-        cost *= 2; // Each upgrade doubles in price
-    }
-
-    return { totalUpgrades, totalCost };
-};
-
-// Function to spend all money on upgrades
-const spendAllMoneyOnUpgrades = () => {
-    const initialCost = 50; // Starting cost of upgrades
+ const initialUpgradeCost = 50; // Starting cost of upgrades
     const increasePerUpgrade = 2; // Each upgrade adds $2 per click
 
-    let currentMoney = money; // Local variable to track money
+    // Function to spend all money on upgrades
+    const spendAllMoneyOnUpgrades = () => {
+        let currentMoney = money; // Local variable to track money
+        let totalUpgrades = 0; // Total number of upgrades purchased
+        let upgradeCost = initialUpgradeCost; // Initialize cost for upgrades
 
-    // Calculate total upgrades and cost
-    let totalUpgrades = 0;
-    let totalCost = 0;
-    let upgradeCost = initialCost;
+        // Calculate total upgrades that can be bought
+        while (currentMoney >= upgradeCost) {
+            currentMoney -= upgradeCost; // Subtract upgrade cost from money
+            totalUpgrades++; // Increment total upgrades
+            upgradeCost *= 2; // Each upgrade doubles in price
+        }
 
-    // Loop until we can't afford more upgrades
-    while (currentMoney >= upgradeCost) {
-        currentMoney -= upgradeCost; // Subtract upgrade cost from money
-        totalUpgrades++;
-        totalCost += upgradeCost;
-        upgradeCost *= 2; // Upgrade cost doubles each time
-    }
-
-    if (totalUpgrades > 0) {
-        setMoney(currentMoney); // Set remaining money after buying all upgrades
-        setMoneyPerClick(prev => prev + totalUpgrades * increasePerUpgrade); // Increase moneyPerClick by the total upgrades bought
-    }
-};
+        // Update state if upgrades were purchased
+        if (totalUpgrades > 0) {
+            setMoney(currentMoney); // Set remaining money after buying upgrades
+            setMoneyPerClick(prev => prev + totalUpgrades * increasePerUpgrade); // Increase moneyPerClick
+        }
+    };
 
     // Double or nothing feature
     const doubleOrNothing = () => {
@@ -247,7 +229,9 @@ const formatNumber = (num) => {
                         <button onClick={testYourLuck} className="luck-button">Test Your Luck</button> {/* Added Test Your Luck */}
                         <button onClick={prestige} disabled={money < prestigeCost} className="prestige-button">Prestige (Cost: ${prestigeCost})</button>
                         <button onClick={() => setUpgradePage(true)} className="upgrade-page-button">Go to Upgrades Page</button>
-<button onClick={spendAllMoneyOnUpgrades}>Spend Half of your Money on Upgrades</button>
+       <button onClick={spendAllMoneyOnUpgrades} className="upgrade-button">
+                    Spend All Money on Upgrades
+                </button>
 
                        
                     </>
