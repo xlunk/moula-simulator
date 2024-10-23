@@ -6,7 +6,7 @@ const App = () => {
     const [moneyPerClick, setMoneyPerClick] = useState(() => Number(localStorage.getItem("moneyPerClick")) || 1);
     const [autoEarnings, setAutoEarnings] = useState(() => Number(localStorage.getItem("autoEarnings")) || 0);
     const [prestigePoints, setPrestigePoints] = useState(() => Number(localStorage.getItem("prestigePoints")) || 0);
-    const [prestigeCount, setPrestigeCount] = useState(() => Number(localStorage.getItem("rebirthCount")) || 0); // renamed to prestigeCount
+    const [prestigeCount, setPrestigeCount] = useState(() => Number(localStorage.getItem("rebirthCount")) || 0);
     const [prestigeMultiplier, setPrestigeMultiplier] = useState(() => Number(localStorage.getItem("prestigeMultiplier")) || 1);
     const [prestigeCost, setPrestigeCost] = useState(() => Number(localStorage.getItem("prestigeCost")) || 1000);
     const [upgradePage, setUpgradePage] = useState(false);
@@ -14,10 +14,13 @@ const App = () => {
     const [casinoOutcome, setCasinoOutcome] = useState("");
     const [betColor, setBetColor] = useState("");
     const [wheelSpin, setWheelSpin] = useState(false);
-    const [showPopup, setShowPopup] = useState(false); // popup for win/loss
-    const [luckOpen, setLuckOpen] = useState(false); // For "Test Your Luck" feature
-    const [prize, setPrize] = useState(null); // Track the prize
-    const [playTime, setPlayTime] = useState(0); // Track playtime
+    const [showPopup, setShowPopup] = useState(false);
+    const [luckOpen, setLuckOpen] = useState(false);
+    const [prize, setPrize] = useState(null);
+    const [playTime, setPlayTime] = useState(0);
+    const [keyInput, setKeyInput] = useState("");
+    const [showKeyInput, setShowKeyInput] = useState(false);
+    const [devMode, setDevMode] = useState(false);
 
     // Prize pool for "Test Your Luck"
     const prizePool = [
@@ -47,46 +50,6 @@ const App = () => {
         return () => clearInterval(interval);
     }, []);
 
-    useEffect(() => {
-        let lastPressTime = 0;
-        let pressCount = 0;
-
-        const handleKeyDown = (event) => {
-            if (event.key === '.') {
-                const currentTime = Date.now();
-                if (currentTime - lastPressTime <= 3000) {
-                    pressCount++;
-                } else {
-                    pressCount = 1; // reset count if more than 3 seconds
-                }
-
-                lastPressTime = currentTime;
-
-                if (pressCount === 3) {
-                    setShowKeyInput(true);
-                    pressCount = 0; // reset count after opening input
-                }
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, []);
-
-    // Function to check private key
-    const checkPrivateKey = () => {
-        const privateKey = `MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQD1zHX4hKpRC9V9RlbvhYBLvp/3qmy9yTq3+JucvliM8nnS8QuGrMnA5l/SQraZ3YFBAilJeZEQHObXxLmWWbN0Ttf96vc1OeFsMoqmOTBX12BjxfF5ikeR9wTB0XI2dd0Ks4rGMOqpzHnG2ZyoUOtsXPhgRhZjggqeuI6N6PlhFRLsSch84m5hFB926yWJT/nVPr8pP8sCB7SGt2KPlstYpLtJnyuIG0xCkaCOXheEnigJgfO9Ggbk7GEy4f4AkuZFtr0ALv81IdXQpfcPfFQ4xDgj1jgbao6UId0C9PaEiiJAghPqcH9Igx6XX+evSEe1tdOa7dE8OBCEa74a7JkJAgMBAAECggEADxby6cOAjo0tbrgSFOObPAst2DnW3H0tZPyW1l6RInCtrezXtPgyl+xiAY8llU3rO3RzLcGQIu8Yn4fCOkqzdkvI0sZz+rPc9Ol9aDWmlB3yxZfx+nDUx/nkNDSJex0X6X+a4LlBZBSGKAEABGKYsVmxHdKaWULd0rSoe78hCtFDlVuvnEUfEXcQtwAIElgh6DL5nHYUsD8HTFZMCakZyyS7wzeL4fi+W0Be1xUZgxHDTR68bQBa2hdLLg4hbAgOEmcWIT9jgygAYf+d4yCVQENjkwgYxMF7GmVKWCM42bzP+3cf4HdYZu2gWn1K4jwy+OYKVUaOrIXRdFSP+oLnoQKBgQD72opPccsAlUZzaNHYFTKzs5UhJ+TrZVxevzkqw5AuHTc+UCVNBORNKjXt1DNr7O4Y5XltP58PMKdasgMqtZcpEZ60/LunUBJjHj329oyCHOEHwSgmmChioJ8M/aoLUdxIBKtBBhQ4f2u0SXx/Q1avoFVT+JDirjfcZK8+sKlw9QKBgQD52Ga2bT7WBnXwDIY1lw4HisOBR+rw2xYBiFtIeG4RJfjyhXYGHs+kchIuCEOo6MwIQUzZZN60W0PMmaUKjgn8QHLxuN2j1Tn7Po8z+KA33HjwbtUxD5C9tiXTMjMkvgFZ8LqoKNUH/NdStjg+ag0BQXiOhkRqsH+swTmoPSgrRQKBgB22puLAlia3ddxf3YIU3ip9YXbL8iIjj0ZOYTw+XmBSahYb9oqjrRu9gydQBdER3vVo/W56NxXfs57rqZv8WJ0rywGnX6xZshGnm7/rTqB7L8FudII5KWqZcKpjsxAq1EZa5qmBQhl4TwiyMtIA69VEoUyK4u0biNOjvVk0FomRAoGAPlG/FQPc54/G/TByjY13H2R6bZXdwWQ0cf9sHYCEm9xn4z5s+QvYaUFWzYqcLdabhfebzqH9dulI2RD9DbXjLZQ7iwgMFUeXHb2GbPTeTKV4HWSRffwLhf5isXU82Pgrg6HRLvVh9lvViF1BlRB8nkp3HynWXc8FwsakzqAEXL80tEMgB6cxonak=`;
-
-        if (keyInput === privateKey) {
-            setDevMode(true);
-            setShowKeyInput(false);
-            setKeyInput("");
-        } else {
-            alert("Invalid key. Please try again.");
-        }
-    };
     // 1-hour reminder
     useEffect(() => {
         if (playTime >= 3600) {
@@ -205,6 +168,17 @@ const App = () => {
         setShowPopup(true); // Show popup for result
     };
 
+    const checkPrivateKey = () => {
+        const privateKey = `EBs9S30bXWhU0tdbIjI2VMdHyJQNHpTzkF9W07r8KYcA7pK9w3gTEB6OQ6dQ5cO9K+9TQ5L3fy1M7tTqAKn7q8D65xUoUExGCjMQet2QSmXqEgb46pP0MZAlR4e6D6WQul7OEkGE2pAyxZT32xNz7an/m3Vn0TocJ9FSQ6ddmO2B5AhA9L93PhFrFYKZ0kCgYBXf6u8z/AQMb08ZBfwnJDQlUwM/5lF1HwP5W3eAY6lKqAaWQxNL6/uk+LVmDLg0Fk3TOEyQLC1tN8/lFYlx2XXDioFhDJFSwyL20pxn8q6DE7YY0DgOfR8zm6xy55l7P9I/ACAEwa4RvDg+bgN7KPg9RBl+yBkpKfu6VqptL4CXPvXKJUkDwUtxs1uRjBG0Jm1vl30rVY73t3I5bQ==`;
+        if (keyInput === privateKey) {
+            setDevMode(!devMode);
+            setShowKeyInput(false);
+            setKeyInput("");
+        } else {
+            alert("Incorrect private key!");
+        }
+    };
+
     return (
         <div className="App">
             <h1 className="title">Moula Moula [BETA]</h1>
@@ -223,7 +197,7 @@ const App = () => {
                         <button onClick={() => buyUpgrade(50, 2, 'Basic Upgrade')} disabled={money < 50} className="upgrade-button">Buy Upgrade (+$2 per click) (Cost: $50)</button>
                         <button onClick={() => buyAutoEarnings(100, 1)} disabled={money < 100} className="upgrade-button">Buy Auto-Earnings (+$1/sec) (Cost: $100)</button>
                         <button onClick={openCasino} className="casino-button">Open Blind Betting (Casino)</button>
-                        <button onClick={testYourLuck} className="luck-button">Test Your Luck</button> {/* Added Test Your Luck */}
+                        <button onClick={testYourLuck} className="luck-button">Test Your Luck</button>
                         <button onClick={prestige} disabled={money < prestigeCost} className="prestige-button">Prestige (Cost: ${prestigeCost})</button>
                         <button onClick={() => setUpgradePage(true)} className="upgrade-page-button">Go to Upgrades Page</button>
                         {casinoOutcome && <p className="casino-outcome">{casinoOutcome}</p>}
@@ -262,33 +236,14 @@ const App = () => {
                 </div>
             )}
 
-                        {showKeyInput && (
-                <div className="popup">
-                    <h2>Enter Secret Key</h2>
-                    <input 
-                        type="text" 
-                        value={keyInput} 
-                        onChange={(e) => setKeyInput(e.target.value)} 
-                    />
+            {/* Developer Mode Input */}
+            {showKeyInput && (
+                <div>
+                    <h3>Enter Private Key for Developer Mode:</h3>
+                    <input type="text" value={keyInput} onChange={(e) => setKeyInput(e.target.value)} />
                     <button onClick={checkPrivateKey}>Submit</button>
-                    <button onClick={() => setShowKeyInput(false)}>Cancel</button>
                 </div>
             )}
-
-            {/* Development Menu */}
-            {devMode && (
-                <div className="dev-menu">
-                    <h2>Development Menu</h2>
-                    <button onClick={() => setMoney(money + 10000)}>Add 10,000 Money</button>
-                    <button onClick={() => setMoneyPerClick(moneyPerClick + 1)}>Increase Money per Click</button>
-                    <button onClick={() => setAutoEarnings(autoEarnings + 1)}>Increase Auto Earnings</button>
-                    <button onClick={() => setPrestigePoints(prestigePoints + 1)}>Add Prestige Point</button>
-                    <button onClick={() => setPrestigeCost(prestigeCost * 2)}>Double Prestige Cost</button>
-                    <button onClick={() => setCasinoOpen(true)}>Open Casino</button>
-                    {/* Add other dev features here */}
-                </div>
-            )}
-      
 
             <footer className="footer">Game by: @xlnk - This game is in current development and in a BETA stage. Contact @xlnk on Discord for any bug fixes or ideas to add!</footer>
         </div>
