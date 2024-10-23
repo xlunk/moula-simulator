@@ -211,11 +211,12 @@ const App = () => {
                         <button onClick={() => setCasinoOpen(false)} className="back-button">Back to Main Game</button>
                     </>
                 ) : luckOpen ? (
-                    <>
+                    <> <button onClick={() => setLuckOpen(false)} className="back-button">Back to Main Game</button>
+                    <h2> Test Your Luck! </h2>
                         <h2>You won: {prize?.name || 'Nothing'} worth ${prize?.value || 0}!</h2>
                         <button onClick={() => setMoney(prize?.value)} className="casino-button">Cash Out</button>
                         <button onClick={doubleOrNothing} className="casino-button">Double or Nothing</button>
-                    <button onClick={() => setluckOpen(false)} className="back-button">Back to Main Game</button>
+                   
                     </>
                 ) : null}
             </div>
