@@ -165,16 +165,31 @@ const App = () => {
         setShowPopup(true); // Show popup for result
     };
 
+const formatNumber = (num) => {
+    if (num >= 1_000_000_000_000_000) {
+        return `${(num / 1_000_000_000_000_000).toFixed(2)}Q (${num.toLocaleString()})`; // Quadrillions
+    } else if (num >= 1_000_000_000_000) {
+        return `${(num / 1_000_000_000_000).toFixed(2)}T (${num.toLocaleString()})`; // Trillions
+    } else if (num >= 1_000_000_000) {
+        return `${(num / 1_000_000_000).toFixed(2)}B (${num.toLocaleString()})`; // Billions
+    } else if (num >= 1_000_000) {
+        return `${(num / 1_000_000).toFixed(2)}M (${num.toLocaleString()})`; // Millions
+    }
+    return num.toLocaleString(); // Show full number for anything below a million
+};
+
+    
     return (
         <div className="App">
             <h1 className="title">Moula Moula [BETA]</h1>
-            <h2 className="money">Money: ${money.toFixed(2)}</h2>
-            <h3>Money Per Click: ${moneyPerClick * prestigeMultiplier}</h3>
-            <h3>Auto Earnings: ${autoEarnings * prestigeMultiplier}/sec</h3>
-            <h3>Prestige Points: {prestigePoints}</h3>
-            <h3>Prestige Multiplier: x{prestigeMultiplier}</h3>
-            <h3>Prestige Count: {prestigeCount}</h3>
-            <h3>Prestige Cost: ${prestigeCost}</h3>
+       <h2 className="money">Money: ${formatNumber(money)}</h2>
+<h3>Money Per Click: ${formatNumber(moneyPerClick * prestigeMultiplier)}</h3>
+<h3>Auto Earnings: ${formatNumber(autoEarnings * prestigeMultiplier)}/sec</h3>
+<h3>Prestige Points: {prestigePoints}</h3>
+<h3>Prestige Multiplier: x{prestigeMultiplier}</h3>
+<h3>Prestige Count: {prestigeCount}</h3>
+<h3>Prestige Cost: ${formatNumber(prestigeCost)}</h3>
+
 
             <div className="button-container">
                 {!upgradePage && !casinoOpen && !luckOpen ? (
