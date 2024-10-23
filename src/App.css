@@ -118,7 +118,7 @@ button:disabled {
 }
 
 .footer {
-    position: fixed;
+
     bottom: 0; /* Position it at the bottom */
     left: 50%; /* Start at the left center */
     transform: translateX(-50%); /* Shift it left by half its width to center */
@@ -127,7 +127,7 @@ button:disabled {
     text-align: center; /* Center the text */
     width: 100%; /* Make it take full width if needed */
     padding: 10px 0; /* Add some padding for better appearance */
-    background-color: rgba(255, 255, 255, 0.8); /* Optional: Add a background for better visibility */
+  
 }
 
 
