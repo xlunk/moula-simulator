@@ -151,7 +151,8 @@ const App = () => {
         }
     };
 
-  const calculateTotalUpgrades = (initialCost, increasePerUpgrade, currentMoney) => {
+// Function to calculate how many upgrades can be bought and their total cost
+const calculateTotalUpgrades = (initialCost, increasePerUpgrade, currentMoney) => {
     let totalUpgrades = 0;
     let cost = initialCost;
     let totalCost = 0;
@@ -166,22 +167,32 @@ const App = () => {
     return { totalUpgrades, totalCost };
 };
 
-// Function to spend all money on upgrades in one go
+// Function to spend all money on upgrades
 const spendAllMoneyOnUpgrades = () => {
     const initialCost = 50; // Starting cost of upgrades
     const increasePerUpgrade = 2; // Each upgrade adds $2 per click
 
-    // Calculate how many upgrades can be bought and the total cost
-    const { totalUpgrades, totalCost } = calculateTotalUpgrades(initialCost, increasePerUpgrade, money);
+    let currentMoney = money; // Local variable to track money
+
+    // Calculate total upgrades and cost
+    let totalUpgrades = 0;
+    let totalCost = 0;
+    let upgradeCost = initialCost;
+
+    // Loop until we can't afford more upgrades
+    while (currentMoney >= upgradeCost) {
+        currentMoney -= upgradeCost; // Subtract upgrade cost from money
+        totalUpgrades++;
+        totalCost += upgradeCost;
+        upgradeCost *= 2; // Upgrade cost doubles each time
+    }
 
     if (totalUpgrades > 0) {
-        // Deduct total cost from player's money
-        setMoney(prevMoney => prevMoney - totalCost);
-
-        // Increment moneyPerClick based on the number of upgrades bought
-        setMoneyPerClick(prevPerClick => prevPerClick + totalUpgrades * increasePerUpgrade);
+        setMoney(currentMoney); // Set remaining money after buying all upgrades
+        setMoneyPerClick(prev => prev + totalUpgrades * increasePerUpgrade); // Increase moneyPerClick by the total upgrades bought
     }
 };
+
     // Double or nothing feature
     const doubleOrNothing = () => {
         const rand = Math.random();
