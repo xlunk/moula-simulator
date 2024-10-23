@@ -135,7 +135,7 @@ const App = () => {
     const testYourLuck = () => {
         if (money > 0) {
             setLuckOpen(true);
-            setMoney(0); // Lose all your money in exchange for luck spin
+          
 
             const rand = Math.random();
             let selectedPrize = null;
