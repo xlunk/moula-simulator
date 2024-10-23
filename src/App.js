@@ -151,6 +151,23 @@ const App = () => {
         }
     };
 
+      const spendAllMoneyOnUpgrades = () => {
+        let cost = 50;
+        let increase = 2;
+        let moneyLeft = money;
+        let upgradesBought = 0;
+
+        // Purchase upgrades while the user has enough money
+        while (moneyLeft >= cost) {
+            upgradesBought++;
+            moneyLeft -= cost;
+        }
+
+        if (upgradesBought > 0) {
+            setMoney(moneyLeft); // Update money after purchases
+            setMoneyPerClick(prev => prev + upgradesBought * increase); // Increase money per click
+        }
+    };
     // Double or nothing feature
     const doubleOrNothing = () => {
         const rand = Math.random();
@@ -181,6 +198,7 @@ const formatNumber = (num) => {
     
     return (
         <div className="App">
+        <p>Total playtime: {Math.floor(playTime / 3600)} hours {Math.floor(playTime % 3600 / 60)} minutes</p>
             <h1 className="title">Moula Moula [BETA]</h1>
        <h2 className="money">Money: ${formatNumber(money)}</h2>
 <h3>Money Per Click: ${formatNumber(moneyPerClick * prestigeMultiplier)}</h3>
@@ -194,6 +212,7 @@ const formatNumber = (num) => {
             <div className="button-container">
                 {!upgradePage && !casinoOpen && !luckOpen ? (
                     <>
+                     {casinoOutcome && <p className="casino-outcome">{casinoOutcome}</p>}
                         <button onClick={handleClick} className="main-button">Click to Earn Money</button>
                         <button onClick={() => buyUpgrade(50, 2, 'Basic Upgrade')} disabled={money < 50} className="upgrade-button">Buy Upgrade (+$2 per click) (Cost: $50)</button>
                         <button onClick={() => buyUpgrade(5000, 100, 'Basic Upgrade')} disabled={money < 5000} className="upgrade-button">Buy Upgrade (+$100 per click) (Cost: $5000)</button>
@@ -203,7 +222,8 @@ const formatNumber = (num) => {
                         <button onClick={testYourLuck} className="luck-button">Test Your Luck</button> {/* Added Test Your Luck */}
                         <button onClick={prestige} disabled={money < prestigeCost} className="prestige-button">Prestige (Cost: ${prestigeCost})</button>
                         <button onClick={() => setUpgradePage(true)} className="upgrade-page-button">Go to Upgrades Page</button>
-                        {casinoOutcome && <p className="casino-outcome">{casinoOutcome}</p>}
+ <button onClick={spendAllMoneyOnUpgrades}>Spend All Money on +2 Upgrades</button>
+                       
                     </>
                 ) : upgradePage ? (
                     <>
