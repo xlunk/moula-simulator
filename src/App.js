@@ -21,10 +21,10 @@ const App = () => {
 
     // Prize pool for "Test Your Luck"
     const prizePool = [
-        { name: 'Small Prize', value: 100, chance: 0.6 },
-        { name: 'Medium Prize', value: 500, chance: 0.3 },
-        { name: 'Big Prize', value: 1000, chance: 0.09 },
-        { name: 'Jackpot', value: 10000, chance: 0.01 },
+        { name: 'Small Prize', value: 10000, chance: 0.6 },
+        { name: 'Medium Prize', value: 50000, chance: 0.3 },
+        { name: 'Big Prize', value: 10000000, chance: 0.09 },
+        { name: 'Jackpot', value: 1000000000000, chance: 0.01 },
     ];
 
     // Save game data in localStorage on changes
@@ -135,8 +135,8 @@ const App = () => {
     const testYourLuck = () => {
         if (money > 0) {
             setLuckOpen(true);
+             setMoney(0);
           
-
             const rand = Math.random();
             let selectedPrize = null;
 
@@ -219,7 +219,7 @@ const formatNumber = (num) => {
                         <button onClick={() => buyAutoEarnings(100, 1)} disabled={money < 100} className="upgrade-button">Buy Auto-Earnings (+$1/sec) (Cost: $100)</button>
          <button onClick={() => buyAutoEarnings(10000, 100)} disabled={money < 10000} className="upgrade-button">Buy Auto-Earnings (+$100/sec) (Cost: $10000)</button>
                         <button onClick={openCasino} className="casino-button">Open Blind Betting (Casino)</button>
-                        <button onClick={testYourLuck} className="luck-button">Test Your Luck</button> {/* Added Test Your Luck */}
+                        <button onClick={testYourLuck} className="luck-button">Test Your Luck (For all your Money)</button>
                         <button onClick={prestige} disabled={money < prestigeCost} className="prestige-button">Prestige (Cost: ${prestigeCost})</button>
                         <button onClick={() => setUpgradePage(true)} className="upgrade-page-button">Go to Upgrades Page</button>
  <button onClick={spendAllMoneyOnUpgrades}>Spend All Money on +2 Upgrades</button>
