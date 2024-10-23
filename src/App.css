@@ -118,9 +118,9 @@ button:disabled {
 }
 
 .footer {
-    position: absolute;
+
     bottom: 0;
-    left: 50%;
+
     transform: translateX(-50%);
     font-size: 1.2em;
     color: #ff9800;
