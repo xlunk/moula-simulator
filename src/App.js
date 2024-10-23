@@ -263,7 +263,7 @@ const formatNumber = (num) => {
                 </div>
             )}
 
-            <footer className="footer">Game by: @xlnk - This game is in current development and in a BETA stage. Contact @xlnk on Discord for any bug fixes or ideas to add!</footer>
+            <p className="footer">Game by: @xlnk - This game is in current development and in a BETA stage. Contact @xlnk on Discord for any bug fixes or ideas to add!</p>
         </div>
     );
 };
