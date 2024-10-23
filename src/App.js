@@ -6,7 +6,7 @@ const App = () => {
     const [moneyPerClick, setMoneyPerClick] = useState(() => Number(localStorage.getItem("moneyPerClick")) || 1);
     const [autoEarnings, setAutoEarnings] = useState(() => Number(localStorage.getItem("autoEarnings")) || 0);
     const [prestigePoints, setPrestigePoints] = useState(() => Number(localStorage.getItem("prestigePoints")) || 0);
-    const [prestigeCount, setPrestigeCount] = useState(() => Number(localStorage.getItem("rebirthCount")) || 0);
+    const [prestigeCount, setPrestigeCount] = useState(() => Number(localStorage.getItem("rebirthCount")) || 0); // renamed to prestigeCount
     const [prestigeMultiplier, setPrestigeMultiplier] = useState(() => Number(localStorage.getItem("prestigeMultiplier")) || 1);
     const [prestigeCost, setPrestigeCost] = useState(() => Number(localStorage.getItem("prestigeCost")) || 1000);
     const [upgradePage, setUpgradePage] = useState(false);
@@ -14,13 +14,10 @@ const App = () => {
     const [casinoOutcome, setCasinoOutcome] = useState("");
     const [betColor, setBetColor] = useState("");
     const [wheelSpin, setWheelSpin] = useState(false);
-    const [showPopup, setShowPopup] = useState(false);
-    const [luckOpen, setLuckOpen] = useState(false);
-    const [prize, setPrize] = useState(null);
-    const [playTime, setPlayTime] = useState(0);
-    const [keyInput, setKeyInput] = useState("");
-    const [showKeyInput, setShowKeyInput] = useState(false);
-    const [devMode, setDevMode] = useState(false);
+    const [showPopup, setShowPopup] = useState(false); // popup for win/loss
+    const [luckOpen, setLuckOpen] = useState(false); // For "Test Your Luck" feature
+    const [prize, setPrize] = useState(null); // Track the prize
+    const [playTime, setPlayTime] = useState(0); // Track playtime
 
     // Prize pool for "Test Your Luck"
     const prizePool = [
@@ -168,17 +165,6 @@ const App = () => {
         setShowPopup(true); // Show popup for result
     };
 
-    const checkPrivateKey = () => {
-        const privateKey = `EBs9S30bXWhU0tdbIjI2VMdHyJQNHpTzkF9W07r8KYcA7pK9w3gTEB6OQ6dQ5cO9K+9TQ5L3fy1M7tTqAKn7q8D65xUoUExGCjMQet2QSmXqEgb46pP0MZAlR4e6D6WQul7OEkGE2pAyxZT32xNz7an/m3Vn0TocJ9FSQ6ddmO2B5AhA9L93PhFrFYKZ0kCgYBXf6u8z/AQMb08ZBfwnJDQlUwM/5lF1HwP5W3eAY6lKqAaWQxNL6/uk+LVmDLg0Fk3TOEyQLC1tN8/lFYlx2XXDioFhDJFSwyL20pxn8q6DE7YY0DgOfR8zm6xy55l7P9I/ACAEwa4RvDg+bgN7KPg9RBl+yBkpKfu6VqptL4CXPvXKJUkDwUtxs1uRjBG0Jm1vl30rVY73t3I5bQ==`;
-        if (keyInput === privateKey) {
-            setDevMode(!devMode);
-            setShowKeyInput(false);
-            setKeyInput("");
-        } else {
-            alert("Incorrect private key!");
-        }
-    };
-
     return (
         <div className="App">
             <h1 className="title">Moula Moula [BETA]</h1>
@@ -197,7 +183,7 @@ const App = () => {
                         <button onClick={() => buyUpgrade(50, 2, 'Basic Upgrade')} disabled={money < 50} className="upgrade-button">Buy Upgrade (+$2 per click) (Cost: $50)</button>
                         <button onClick={() => buyAutoEarnings(100, 1)} disabled={money < 100} className="upgrade-button">Buy Auto-Earnings (+$1/sec) (Cost: $100)</button>
                         <button onClick={openCasino} className="casino-button">Open Blind Betting (Casino)</button>
-                        <button onClick={testYourLuck} className="luck-button">Test Your Luck</button>
+                        <button onClick={testYourLuck} className="luck-button">Test Your Luck</button> {/* Added Test Your Luck */}
                         <button onClick={prestige} disabled={money < prestigeCost} className="prestige-button">Prestige (Cost: ${prestigeCost})</button>
                         <button onClick={() => setUpgradePage(true)} className="upgrade-page-button">Go to Upgrades Page</button>
                         {casinoOutcome && <p className="casino-outcome">{casinoOutcome}</p>}
@@ -233,15 +219,6 @@ const App = () => {
                 <div className="popup">
                     <h2>{casinoOutcome || 'Hello, Just Making Sure You are There!'}</h2>
                     <button onClick={() => setShowPopup(false)}>OK</button>
-                </div>
-            )}
-
-            {/* Developer Mode Input */}
-            {showKeyInput && (
-                <div>
-                    <h3>Enter Private Key for Developer Mode:</h3>
-                    <input type="text" value={keyInput} onChange={(e) => setKeyInput(e.target.value)} />
-                    <button onClick={checkPrivateKey}>Submit</button>
                 </div>
             )}
 
