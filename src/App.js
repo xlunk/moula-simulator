@@ -234,7 +234,7 @@ const formatNumber = (num) => {
                         <button onClick={testYourLuck} className="luck-button">Test Your Luck</button> {/* Added Test Your Luck */}
                         <button onClick={prestige} disabled={money < prestigeCost} className="prestige-button">Prestige (Cost: ${prestigeCost})</button>
                         <button onClick={() => setUpgradePage(true)} className="upgrade-page-button">Go to Upgrades Page</button>
-<button onClick={spendAllMoneyOnUpgrades}>Spend All Money on Upgrades</button>
+<button onClick={spendAllMoneyOnUpgrades}>Spend Half of your Money on Upgrades</button>
 
                        
                     </>
